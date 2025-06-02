@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Büte Kalmamak Lazım - Tokat GOÜ Not Hesaplama</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Genel Stil Ayarları */
+        body {
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            flex-direction: column; /* Öğeleri dikey olarak sırala */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(to right, #6a11cb 0%, #2575fc 100%); /* Mor-mavi gradient arka plan */
+            margin: 0;
+            color: #333;
+            padding: 20px;
+            box-sizing: border-box; /* Padding'in genişliğe dahil olmasını sağlar */
+        }
+
+        /* Üniversite Başlığı Stili */
+        .university-header {
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 25px; /* Altındaki kutudan boşluk */
+            padding: 15px 25px;
+            background-color: rgba(0, 0, 0, 0.2); /* Yarı şeffaf arka plan */
+            border-radius: 10px;
+            font-size: 1.6em;
+            font-weight: 700;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Ana Hesaplama Kutusu Stili */
+        .container {
+            background-color: #ffffff;
+            padding: 35px 45px;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2); /* Gölge efekti */
+            width: 100%;
+            max-width: 500px; /* Maksimum genişlik */
+            text-align: center;
+            transition: transform 0.3s ease-in-out; /* Fare üzerine gelince animasyon */
+            border: 1px solid #e0e0e0;
+            margin-bottom: 25px; /* Altındaki footer için boşluk */
+        }
+
+        .container:hover {
+            transform: translateY(-5px); /* Fare üzerine gelince yukarı kayma */
+        }
+
+        /* Başlık Stili */
+        h1 {
+            color: #2575fc; /* Mavi renk */
+            margin-bottom: 25px;
+            font-size: 2.5em;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        /* Giriş Grubu (Label ve Input) Stili */
+        .input-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        label {
+            display: block; /* Her etiketi yeni satıra al */
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #555;
+            font-size: 1.1em;
+        }
+
+        input[type="number"] {
+            width: calc(100% - 24px); /* Padding'i hesaba katarak tam genişlik */
+            padding: 14px 12px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1.2em;
+            box-sizing: border-box; /* Padding ve border'ı genişliğe dahil et */
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input[type="number"]:focus {
+            border-color: #6a11cb; /* Odaklanınca mor çerçeve */
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(106, 17, 203, 0.2); /* Odaklanınca mor dış gölge */
+        }
+
+        /* Buton Stili */
+        button {
+            background-color: #28a745; /* Yeşil renk */
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer; /* Fare imleci */
+            font-size: 1.3em;
+            font-weight: 700;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            width: 100%;
+            letter-spacing: 0.5px;
+        }
+
+        button:hover {
+            background-color: #218838; /* Koyu yeşil */
+            transform: translateY(-3px); /* Yukarı kayma efekti */
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Buton gölgesi */
+        }
+
+        /* Sonuç Alanı Stili */
+        #sonuc {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #333;
+            background-color: #e9ecef; /* Açık gri arka plan */
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column; /* Metni dikey ortala */
+            text-align: center;
+            line-height: 1.4;
+            border: 1px solid #dcdcdc;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05); /* İç gölge */
+        }
+
+        /* Geçme Durumu Renkleri */
+        .passed {
+            background-color: #d4edda; /* Yeşilimsi */
+            color: #155724; /* Koyu yeşil */
+            border: 1px solid #c3e6cb;
+        }
+
+        .failed {
+            background-color: #f8d7da; /* Kırmızımsı */
+            color: #721c24; /* Koyu kırmızı */
+            border: 1px solid #f5c6cb;
+        }
+
+        .error {
+            background-color: #fff3cd; /* Sarımsı */
+            color: #856404; /* Koyu sarı */
+            border: 1px solid #ffeeba;
+        }
+
+        /* Footer Stili */
+        footer {
+            margin-top: 20px;
+            font-size: 0.95em;
+            color: #ffffff; /* Beyaz metin */
+            padding: 15px;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.3); /* Yarı şeffaf arka plan */
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Mobil Uyumlu Tasarım (Responsive) */
+        @media (max-width: 600px) {
+            .university-header {
+                font-size: 1.3em;
+                padding: 10px 15px;
+            }
+            .container {
+                padding: 25px 30px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+            input[type="number"], button {
+                font-size: 1.1em;
+                padding: 12px;
+            }
+            #sonuc {
+                font-size: 1.2em;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="university-header">
+        <h2>Tokat Gazi Osman Paşa Üniversitesi</h2>
+    </div>
+
+    <div class="container">
+        <h1>Büte Kalmamak Lazım</h1>
+        
+        <div class="input-group">
+            <label for="vizeNotu">Vize Notunuz (%40):</label>
+            <input type="number" id="vizeNotu" min="0" max="100" placeholder="0-100 arasında bir not girin">
+        </div>
+        
+        <div class="input-group">
+            <label for="finalNotu">Final Notunuz (%60):</label>
+            <input type="number" id="finalNotu" min="0" max="100" placeholder="0-100 arasında bir not girin">
+        </div>
+        
+        <button onclick="hesapla()">Hesapla</button>
+        
+        <div id="sonuc"></div>
+    </div>
+
+    <footer>
+        Yapımcı: OzanH
+    </footer>
+
+    <script>
+        function hesapla() {
+            // HTML elemanlarını seç
+            const vizeNotuInput = document.getElementById('vizeNotu');
+            const finalNotuInput = document.getElementById('finalNotu');
+            const sonucDiv = document.getElementById('sonuc');
+
+            // Giriş değerlerini al ve sayıya çevir
+            const vizeNotu = parseFloat(vizeNotuInput.value);
+            const finalNotu = parseFloat(finalNotuInput.value);
+
+            // Önceki sonuç stilini ve içeriğini temizle
+            sonucDiv.className = ''; 
+            sonucDiv.textContent = '';
+
+            // Girişlerin geçerliliğini kontrol et
+            if (isNaN(vizeNotu) || isNaN(finalNotu) || vizeNotu < 0 || vizeNotu > 100 || finalNotu < 0 || finalNotu > 100) {
+                sonucDiv.innerHTML = "Lütfen **geçerli (0-100 arası)** notlar giriniz.";
+                sonucDiv.classList.add('error'); // Hata stilini uygula
+                return; // Geçersiz giriş varsa fonksiyonu durdur
+            }
+
+            // Geçme notunu hesapla (Vize %40, Final %60)
+            const gecmeNotu = (vizeNotu * 0.40) + (finalNotu * 0.60);
+
+            // Sonucu ekrana yazdır
+            sonucDiv.innerHTML = `Ders geçme notunuz: **${gecmeNotu.toFixed(2)}**`; // Notu iki ondalık basamakla göster
+
+            // Geçme durumunu kontrol et ve ilgili mesajı göster
+            if (gecmeNotu >= 60) {
+                sonucDiv.innerHTML += "<br>Tebrikler! Dersi **geçtiniz**.";
+                sonucDiv.classList.add('passed'); // Geçti stilini uygula
+            } else {
+                sonucDiv.innerHTML += "<br>Maalesef dersi geçemediniz. **Büte kaldınız**.";
+                sonucDiv.classList.add('failed'); // Kaldı stilini uygula
+            }
+        }
+    </script>
+</body>
+</html>
